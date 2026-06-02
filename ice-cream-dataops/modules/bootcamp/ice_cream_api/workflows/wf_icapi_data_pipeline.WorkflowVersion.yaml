@@ -1,0 +1,73 @@
+workflowExternalId: wf_icapi_data_pipeline
+description: Workflow of different tasks executed and trigerred - excercise from  Bootcamp
+version: '1'
+workflowDefinition:
+  description: run tasks in sequence
+  tasks:
+    - externalId:  create_asset_hierarchy
+      type: transformation
+      parameters:
+        transformation:
+          externalId: create_asset_hierarchy_task
+          concurrencyPolicy: fail
+          data: { "hours": 120 }
+      name: First tasks
+      description: extract asset data
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+    
+    - externalId:  contextualize_ts_assets
+      type: transformation
+      parameters:
+        transformation:
+          externalId: contextualize_ts_assets_task
+          concurrencyPolicy: fail
+          data: { "hours": 120 }
+      name: Second tasks
+      description: extract time series data
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+      dependsOn:
+        - externalId: create_asset_hierarchy
+
+    - externalId:  icapi_datapoints_extractor
+      type: function
+      parameters:
+        function:
+          externalId: icapi_datapoints_extractor_task
+          concurrencyPolicy: fail
+          data: { "hours": 120 }
+      name: third tasks
+      description: extract data points
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+      dependsOn:
+        - externalId: contextualize_ts_assets
+
+    - externalId:  oee_timeseries
+      type: function
+      parameters:
+        function:
+          externalId: oee_timeseries_task
+          concurrencyPolicy: fail
+          data: { "hours": 120 }
+      name: fourth tasks
+      description: calculate KPI's
+      retries: 3
+      timeout: 3600
+      onFailure: abortWorkflow
+      dependsOn:
+        - externalId: icapi_datapoints_extractor
+
+
+
+
+  
+
+
+
+
+
