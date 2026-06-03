@@ -10,7 +10,7 @@ workflowDefinition:
         transformation:
           externalId: create_asset_hierarchy
           concurrencyPolicy: fail
-          
+      
       name: First tasks
       description: extract asset data
       retries: 3
