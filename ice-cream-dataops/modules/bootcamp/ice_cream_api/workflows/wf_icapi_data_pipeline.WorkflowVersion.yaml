@@ -4,11 +4,11 @@ version: '1'
 workflowDefinition:
   description: run tasks in sequence
   tasks:
-    - externalId:  create_asset_hierarchy
+    - externalId:  create_asset_hierarchy_task
       type: transformation
       parameters:
         transformation:
-          externalId: create_asset_hierarchy_task
+          externalId: create_asset_hierarchy
           concurrencyPolicy: fail
           data: { "hours": 120 }
       name: First tasks
@@ -17,11 +17,11 @@ workflowDefinition:
       timeout: 3600
       onFailure: abortWorkflow
     
-    - externalId:  contextualize_ts_assets
+    - externalId:  contextualize_ts_assets_task
       type: transformation
       parameters:
         transformation:
-          externalId: contextualize_ts_assets_task
+          externalId: contextualize_ts_assets
           concurrencyPolicy: fail
           data: { "hours": 120 }
       name: Second tasks
@@ -30,13 +30,13 @@ workflowDefinition:
       timeout: 3600
       onFailure: abortWorkflow
       dependsOn:
-        - externalId: create_asset_hierarchy
+        - externalId: create_asset_hierarchy_task
 
-    - externalId:  icapi_datapoints_extractor
+    - externalId:  icapi_datapoints_extractor_task
       type: function
       parameters:
         function:
-          externalId: icapi_datapoints_extractor_task
+          externalId: icapi_datapoints_extractor
           concurrencyPolicy: fail
           data: { "hours": 120 }
       name: third tasks
@@ -45,13 +45,13 @@ workflowDefinition:
       timeout: 3600
       onFailure: abortWorkflow
       dependsOn:
-        - externalId: contextualize_ts_assets
+        - externalId: contextualize_ts_assets_task
 
-    - externalId:  oee_timeseries
+    - externalId:  oee_timeseries_task
       type: function
       parameters:
         function:
-          externalId: oee_timeseries_task
+          externalId: oee_timeseries
           concurrencyPolicy: fail
           data: { "hours": 120 }
       name: fourth tasks
@@ -60,7 +60,7 @@ workflowDefinition:
       timeout: 3600
       onFailure: abortWorkflow
       dependsOn:
-        - externalId: icapi_datapoints_extractor
+        - externalId: icapi_datapoints_extractor_task
 
 
 
