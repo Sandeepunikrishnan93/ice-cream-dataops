@@ -10,7 +10,7 @@ workflowDefinition:
         transformation:
           externalId: create_asset_hierarchy
           concurrencyPolicy: fail
-          data: { "hours": 120 }
+          
       name: First tasks
       description: extract asset data
       retries: 3
@@ -23,7 +23,7 @@ workflowDefinition:
         transformation:
           externalId: contextualize_ts_assets
           concurrencyPolicy: fail
-          data: { "hours": 120 }
+          
       name: Second tasks
       description: extract time series data
       retries: 3
